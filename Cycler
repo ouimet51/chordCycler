@@ -1,0 +1,84 @@
+import java.util.*;
+
+public class Cycler{
+
+    ArrayList<String> chordPool;
+
+    Cycler(String difficluty){
+        ArrayList<ArrayList<String>> allChords = generateChords();
+
+        if (difficluty.equals("e")){
+            chordPool = allChords.get(0);
+        }
+
+        if (difficluty.equals("m")){
+            chordPool = allChords.get(0);
+            chordPool.addAll(allChords.get(1));
+        }
+
+        if (difficluty.equals("d")){
+            chordPool = allChords.get(0);
+            chordPool.addAll(allChords.get(1));
+            chordPool.addAll(allChords.get(2));
+        }
+    }
+
+    String getChord(){
+        Random random = new Random();
+        chordPool.get(random.nextInt(chordPool.size()));
+        return chordPool.get(random.nextInt(chordPool.size()));
+    }
+
+    private static ArrayList<ArrayList<String>> generateChords() {
+
+            String[] notes = {"C", "C#", "Db", "D", "D#", "Eb", "E", "F", "F#", "Gb", "G#", "Ab", "A", "A#", "Bb", "B"};
+            String[] qualities = {"Δ", "-", "+", "o", "ø"};
+            String[] additions = {"7"};
+            ArrayList<ArrayList<String>> finalList = new ArrayList<>();
+            ArrayList<String> easy = new ArrayList<>();
+            ArrayList<String> medium = new ArrayList<>();
+            ArrayList<String> hard = new ArrayList<>();
+
+            for (String note : notes) {
+                for (String quality : qualities) {
+                    switch (quality) {
+                        case "Δ":
+                        case "-":
+                            easy.add(note + "" + quality);
+                            medium.add(note + quality + "7");
+                            break;
+                        case "+":
+                        case "o":
+                        case "ø":
+                            medium.add(note + "" + quality);
+                            hard.add(note + quality + "7");
+                            break;
+                        default:
+                            throw new IllegalStateException("Unexpected value: " + quality);
+                    }
+                    // finalList.add(new Chord(note + quality, difficulty));
+                    // finalList.add(new Chord(note + quality + "7" , difficulty + 1));
+                }
+            }
+            finalList.add(easy);
+            finalList.add(medium);
+            finalList.add(hard);
+            return finalList;
+        }
+
+
+    public static void main(String[] args) {
+
+        Scanner userInput = new Scanner(System.in);
+        System.out.println("E M or D?");
+        String userDifficulty = userInput.nextLine();
+        Cycler cycler = new Cycler(userDifficulty);
+        System.out.println(cycler.getChord());
+        String userEngage = userInput.nextLine();
+
+        while(!userEngage.equals("e")){
+            System.out.println(cycler.getChord());
+            userEngage = userInput.nextLine();
+        }
+ }
+}
